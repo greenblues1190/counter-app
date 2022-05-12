@@ -16,8 +16,6 @@ const useSelector = (selector) => {
     // };
   }, [store, updateState]);
 
-  console.log(state);
-
   return state;
 };
 
