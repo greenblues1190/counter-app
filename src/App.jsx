@@ -1,29 +1,48 @@
 import './App.css';
-import { useState } from 'react';
 
 import ButtonGroup from './ButtonGroup';
 import ShowCount from './ShowCount';
 import InputRange from './InputRange';
+import useSelector from './hooks/useSelector';
+import useDispatch from './hooks/useDispatch';
 
 function App() {
-	const [count, setCount] = useState(0);
-	const [diff, setDiff] = useState(0);
+  const { count, diff } = useSelector((state) => ({
+    count: state.count,
+    diff: state.diff,
+  }));
+  const dispatch = useDispatch();
 
-	const onIncrement = () => setCount((prevCount) => prevCount + (diff || 1));
-	const onDecrement = () => setCount((prevCount) => prevCount - (diff || 1));
-	const onReset = () => setCount(0);
+  const onIncrement = () => {
+    dispatch({ type: 'INCREMENT' });
+  };
+  const onDecrement = () => {
+    dispatch({ type: 'DECREMENT' });
+  };
+  const onReset = () => {
+    dispatch({ type: 'RESET' });
+  };
 
-	const handleDiff = ({ target }) => setDiff(target.valueAsNumber);
+  const handleDiff = ({ target }) => {
+    dispatch({
+      type: 'UPDATE_DIFF',
+      payload: { diff: target.valueAsNumber },
+    });
+  };
 
-	return (
-		<div className="App">
-			<main className="App-main">
-				<ShowCount count={count} diff={diff} />
-				<InputRange handleDiff={handleDiff} diff={diff} />
-				<ButtonGroup onDecrement={onDecrement} onReset={onReset} onIncrement={onIncrement} />
-			</main>
-		</div>
-	);
+  return (
+    <div className="App">
+      <main className="App-main">
+        <ShowCount count={count} diff={diff} />
+        <InputRange handleDiff={handleDiff} diff={diff} />
+        <ButtonGroup
+          onDecrement={onDecrement}
+          onReset={onReset}
+          onIncrement={onIncrement}
+        />
+      </main>
+    </div>
+  );
 }
 
 export default App;
